@@ -1,0 +1,94 @@
+<html>
+<head>    
+</head>
+<body>
+    
+<p><a href="https://qmul.mediacore.tv/media/nathan-demo-example/embed_player?context_id=29&amp;embed_token=yD37y9-PuZ0eW-FRzi5q9TVEH2KBOXR0jbLxZfkEGhw2uQ36Xh4KpSdULk2UQOHsx4yt4p-nlYgldcc_gGvWQg" data-media-id="3741980"><img width="400" height="225" title="Video in Teaching" alt="Video in Teaching" src="https://mediacorefiles-a.akamaihd.net/sites/8075/images/media/3741980l-DFumjfaI.jpg" /></a></p>
+<p><a href="www.google.com">Google - Shouldn't work</a></p>
+<p><a href="http://www.google.com">Google - Shouldn't work</a></p>
+<p><a href="http://www.google.com/nathan/link/another/thing">Google - Shouldn't work</a></p>
+<p><a href="https://qmul.mediacore.tv/media/eleanor-green-screen-tryout/embed_player?context_id=29&amp;embed_token=yD37y9-PuZ0eW-FRzi5q9TVEH2KBOXR0jbLxZfkEGhw2uQ36Xh4KpSdULk2UQOHsx4yt4p-nlYgldcc_gGvWQg" data-media-id="3741980"><img width="400" height="225" title="Video in Teaching" alt="Video in Teaching" src="https://mediacorefiles-a.akamaihd.net/sites/8075/images/media/3741980l-DFumjfaI.jpg" /></a></p> 
+    
+<script>
+    window.onload = function(){
+    
+    //mock data as JS Object - I recommend we store this at an endpoint and parse from there
+    var data = {
+        0: {
+            "mediacore" : "eleanor-green-screen-tryout", 
+            "kaltura" : "1_123abc"
+        },
+        1: {
+            "mediacore" : "nathan-demo-example", 
+            "kaltura" : "1_456def"
+        }
+    };
+
+    //get all anchor tags
+    var anchors = document.getElementsByTagName("a"); 
+        
+    //iterate over all tags    
+    for (var i = 0; i < anchors.length; i++) {
+        
+        //define new var for the current link
+        var link = anchors[i].href;
+        
+        //split current var to determine origin
+        var newLink = link.split("/");
+        
+            //IF origin is from mediacore, return the "slug" as our match
+            if(newLink.length >= 2 && newLink[2] == "qmul.mediacore.tv") {
+
+                var valuetomatch = newLink[4];
+
+                var match;
+                
+                var entryId;
+                
+                Object.keys(data).forEach(function(key) {
+                    
+                    if (data[key].mediacore === valuetomatch) {
+                        match = true;
+                        entryId = data[key].kaltura;
+                    }
+                    
+                });
+                
+                if (match) {
+                    
+                    anchors[i].href = "http://kaltura-kaf-uri.com/browseandembed/index/media/entryid/" + entryId + "/showDescription/false/showTitle/false/showTags/false/showDuration/false/showOwner/false/showUploadDate/false/playerSize/400x285/playerSkin/35378522/";
+                    
+                    //QUML specific to remove the old mediacore data-media-id attribute
+                    if(anchors[i].hasAttribute("data-media-id")) {
+                    
+                        anchors[i].removeAttribute("data-media-id");
+                        
+                    }
+                    
+                    //QUML specific to remove the img associated with the video files
+                    var child = anchors[i].childNodes;
+                    anchors[i].removeChild(child[0]);
+                    
+                    
+                } 
+                
+                //else do nothing
+                
+                else {
+                    
+                }
+
+            }
+        
+            //ELSE - do nothing. Note that the iteration occurs in for loop so need to advance counter
+            else{
+                
+            }
+        
+        } //end for loop
+        
+    }
+</script>    
+
+</body>    
+</html>
